@@ -4,6 +4,10 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  // 允许跨域
+  app.enableCors();
+  
   const options = new DocumentBuilder()
     .setTitle('nest-server-api')
     .setDescription('api')

@@ -5,6 +5,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from '../users/schemas/user.schema';
 import { compareSync } from 'bcryptjs';
+import { decrypto } from 'src/utils/crypto';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
@@ -22,7 +23,10 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     if (!user) {
       throw new BadRequestException('用户名不正确');
     }
-    if (!compareSync(password, user.password)) {
+    const pwd = decrypto(password);
+    console.log('pwd===', pwd, password);
+    
+    if (!compareSync(pwd, user.password)) {
       throw new BadRequestException('密码不正确')
     }
     return user;
