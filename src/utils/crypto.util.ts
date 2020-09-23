@@ -21,7 +21,6 @@ export class CryptoUtil {
 
   // 解密
   decrypto(message: string): string {
-    console.log('解密', this.key, this.iv);
     const encryptedHexStr = CryptoJS.enc.Hex.parse(message);
     const messageBase64 = CryptoJS.enc.Base64.stringify(encryptedHexStr);
     const keyHex = CryptoJS.enc.Utf8.parse(this.key);

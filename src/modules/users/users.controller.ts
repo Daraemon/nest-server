@@ -1,7 +1,7 @@
-import { Controller, Inject, Post, Body, Get, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, Get, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User } from './schemas/user.schema';
-import { ApiTags, ApiBody, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('用户')

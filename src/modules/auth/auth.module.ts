@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserSchema } from '../users/schemas/user.schema';
@@ -7,6 +7,7 @@ import { LocalStrategy } from './local.strategy';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
 import { CryptoUtil } from 'src/utils/crypto.util';
+import { CaptchaMiddleware } from 'src/middlewares/captcha.middleware';
 
 @Module({
   imports:[
@@ -16,7 +17,7 @@ import { CryptoUtil } from 'src/utils/crypto.util';
       useFactory: () => ({
         secret: process.env.SECRET_KEY,
         signOptions: {
-          expiresIn: '60s',
+          expiresIn: '600s',
         }
       })
     })
@@ -24,4 +25,10 @@ import { CryptoUtil } from 'src/utils/crypto.util';
   controllers: [AuthController],
   providers: [LocalStrategy, JwtStrategy, CryptoUtil]
 })
-export class AuthModule {}
+export class AuthModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(CaptchaMiddleware)
+      .forRoutes({ path: 'auth/login', method: RequestMethod.POST })
+  }
+}
